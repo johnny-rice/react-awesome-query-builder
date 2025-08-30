@@ -64,7 +64,7 @@ export default (props) => {
   const dropdownWidth = optionsMaxWidth && !isNaN(optionsMaxWidth) ? optionsMaxWidth + SELECT_WIDTH_OFFSET_RIGHT : null;
   const minWidth = width || defaultSelectWidth;
   const isClearAllClicked = React.useRef(false);
-  
+
   const style = {
     width: (multiple ? undefined : minWidth),
     minWidth: minWidth
@@ -139,9 +139,9 @@ export default (props) => {
   };
 
   const specialOptions = filteredOptions?.filter(option => !!option.specialValue).map((option) => (
-    <a 
+    <a
       style={{ padding: "5px 10px", display: "block", cursor: "pointer" }}
-      key={option.specialValue} 
+      key={option.specialValue}
       disabled={getOptionDisabled(option)}
       onClick={onSpecialClick(option.specialValue)}
     >
@@ -185,7 +185,7 @@ export default (props) => {
     // - option selection (`aOnSelect` is also called after)
     // - trying to add new tag from search input (for mode "tags" - unwanted!)
     // - automatic tokenization (like pasting "1,2,3") - issue #1115
-    // 
+    //
     // For single called on:
     // - click (x) at right (clear all)
     // - option selection (`aOnSelect` is also called after)
@@ -244,9 +244,24 @@ export default (props) => {
   const selectProps = {};
   const antdMajorVersion = parseInt(antdVersion.split(".")[0]);
   if (antdMajorVersion >= 5) {
-    selectProps.popupMatchSelectWidth = customProps?.popupMatchSelectWidth || customProps?.dropdownMatchSelectWidth || false;
+    selectProps.popupMatchSelectWidth
+      = customProps?.popupMatchSelectWidth
+        || customProps?.dropdownMatchSelectWidth
+        || false;
   } else {
-    selectProps.dropdownMatchSelectWidth = customProps?.popupMatchSelectWidth || customProps?.dropdownMatchSelectWidth || false;
+    selectProps.dropdownMatchSelectWidth
+      = customProps?.popupMatchSelectWidth
+        || customProps?.dropdownMatchSelectWidth
+        || false;
+  }
+
+  const dropdownProps = {};
+  if (antdMajorVersion >= 5) {
+    dropdownProps.popupStyle
+      = customProps?.popupStyle || customProps?.dropdownStyle || dropdownStyle;
+  } else {
+    dropdownProps.dropdownStyle
+      = customProps?.dropdownStyle || customProps?.popupStyle || dropdownStyle;
   }
 
   return (
@@ -258,7 +273,6 @@ export default (props) => {
       disabled={readonly}
       mode={mode}
       style={customProps?.style || style}
-      dropdownStyle={customProps?.dropdownStyle || dropdownStyle}
       key={"widget-autocomplete"}
       placeholder={customProps?.placeholder || dynamicPlaceholder}
       onDropdownVisibleChange={onDropdownVisibleChange}
@@ -274,6 +288,7 @@ export default (props) => {
       open={open}
       options={optionsToRender}
       {...selectProps}
+      {...dropdownProps}
       {...customProps}
     >
     </Select>
